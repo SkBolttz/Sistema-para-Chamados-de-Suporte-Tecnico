@@ -9,5 +9,7 @@ import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Entity.Model.Usuario;
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
     Usuario findByEmailAndSenha(String email, String senha);
+
+    Usuario findByNome(String nome);
     
 }

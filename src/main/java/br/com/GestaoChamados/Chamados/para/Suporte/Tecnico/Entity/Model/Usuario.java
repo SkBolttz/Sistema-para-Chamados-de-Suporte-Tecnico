@@ -12,6 +12,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -44,6 +45,8 @@ public class Usuario implements UserDetails{
     private String senha;
     private Role role;
     private boolean ativo;
+    @OneToMany(mappedBy = "usuario")
+    private List<Chamado> chamados;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
