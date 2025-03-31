@@ -1,10 +1,12 @@
-package br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Entity;
+package br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Entity.Model;
 
 import java.util.Collection;
 import java.util.List;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Entity.Enum.Role;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

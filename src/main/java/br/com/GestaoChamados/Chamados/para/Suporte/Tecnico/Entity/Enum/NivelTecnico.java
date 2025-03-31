@@ -1,4 +1,4 @@
-package br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Entity;
+package br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Entity.Enum;
 
 public enum NivelTecnico {
     

@@ -5,11 +5,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Entity.Administrador;
-import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Entity.Role;
-import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Entity.Tecnico;
-import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Entity.TodosUsuarios;
-import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Entity.Usuario;
+import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Entity.Enum.Role;
+import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Entity.Model.Administrador;
+import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Entity.Model.Tecnico;
+import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Entity.Model.TodosUsuarios;
+import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Entity.Model.Usuario;
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Exception.AdministradorException;
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Exception.TecnicoException;
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Exception.UsuarioException;
@@ -56,6 +56,14 @@ public class LoginService {
 
         TodosUsuarios todosUsuarios = new TodosUsuarios(usuario);
 
+        todosUsuarios.setId(usuario.getId());
+        todosUsuarios.setNome(usuario.getNome());
+        todosUsuarios.setEmail(usuario.getEmail());
+        todosUsuarios.setTelefone(usuario.getTelefone());
+        todosUsuarios.setSenha(usuario.getSenha());
+        todosUsuarios.setRole(Role.USUARIO);
+        todosUsuarios.setAtivo(true);
+
         usuarioRepository.save(usuario);
         todosUsuariosRepository.save(todosUsuarios);
         
@@ -88,6 +96,14 @@ public class LoginService {
 
         TodosUsuarios todosUsuarios = new TodosUsuarios(tecnico);
 
+        todosUsuarios.setId(tecnico.getId());
+        todosUsuarios.setNome(tecnico.getNome());
+        todosUsuarios.setEmail(tecnico.getEmail());
+        todosUsuarios.setTelefone(tecnico.getTelefone());
+        todosUsuarios.setSenha(tecnico.getSenha());
+        todosUsuarios.setRole(Role.TECNICO);
+        todosUsuarios.setAtivo(true);
+
         todosUsuariosRepository.save(todosUsuarios);
         tecnicoRepository.save(tecnico);
 
@@ -119,6 +135,13 @@ public class LoginService {
         admin.setRole(Role.ADMINISTRADOR);
 
         TodosUsuarios todosUsuarios = new TodosUsuarios(admin);
+        todosUsuarios.setId(admin.getId());
+        todosUsuarios.setNome(admin.getNome());
+        todosUsuarios.setEmail(admin.getEmail());
+        todosUsuarios.setTelefone(admin.getTelefone());
+        todosUsuarios.setSenha(admin.getSenha());
+        todosUsuarios.setRole(Role.ADMINISTRADOR);
+        todosUsuarios.setAtivo(true);
 
         todosUsuariosRepository.save(todosUsuarios);
         administradorRepository.save(admin);

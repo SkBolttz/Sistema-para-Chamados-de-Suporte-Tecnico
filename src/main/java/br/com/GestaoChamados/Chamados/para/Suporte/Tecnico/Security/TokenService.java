@@ -9,7 +9,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
-import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Entity.TodosUsuarios;
+import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Entity.Model.TodosUsuarios;
 
 @Service
 public class TokenService {
