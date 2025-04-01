@@ -2,14 +2,14 @@ package br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Entity.Model;
 
 import java.util.Collection;
 import java.util.List;
-
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Entity.Enum.Role;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -43,6 +43,7 @@ public class Administrador implements UserDetails{
     private String telefone;
     @NotBlank
     private String senha;
+    @Enumerated(EnumType.STRING)
     private Role role;
     private boolean ativo;
     @Override

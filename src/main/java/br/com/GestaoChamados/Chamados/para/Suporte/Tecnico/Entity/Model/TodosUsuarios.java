@@ -12,6 +12,8 @@ import com.fasterxml.jackson.annotation.JsonAlias;
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Entity.Enum.Role;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -46,7 +48,7 @@ public class TodosUsuarios implements UserDetails{
     private String telefone;
     @NotBlank @JsonAlias
     private String senha;
-    @NotNull
+    @NotNull @Enumerated(EnumType.STRING)
     private Role role;
     @NotNull
     private boolean ativo;
@@ -64,7 +66,5 @@ public class TodosUsuarios implements UserDetails{
     }
     public TodosUsuarios(Tecnico tecnico) {}
     public TodosUsuarios(Usuario usuario) {}
-    public TodosUsuarios(Administrador admin) {
-        //TODO Auto-generated constructor stub
-    }
+    public TodosUsuarios(Administrador admin) {} 
 }

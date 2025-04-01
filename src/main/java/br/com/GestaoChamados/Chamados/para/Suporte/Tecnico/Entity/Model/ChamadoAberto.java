@@ -3,10 +3,11 @@ package br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Entity.Model;
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Entity.Enum.Prioridade;
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Entity.Enum.StatusChamado;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -24,8 +25,8 @@ import lombok.ToString;
 @EqualsAndHashCode(of = "id")
 @ToString
 @Entity
-@Table(name = "tb_chamado")
-public class Chamado {
+@Table(name = "tb_chamado_aberto")
+public class ChamadoAberto {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,13 +35,11 @@ public class Chamado {
     private String titulo;
     @NotBlank
     private String descricao;
-    @NotNull
+    @Enumerated(EnumType.STRING)
     private StatusChamado status;
-    @NotNull
+    @Enumerated(EnumType.STRING)
     private Prioridade prioridade;
-    @ManyToOne
-    private Tecnico tecnico;
-    @ManyToOne
-    private Usuario usuario;
+    @NotNull 
+    private Long usuario;
 
 }

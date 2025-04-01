@@ -11,10 +11,11 @@ import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Entity.Enum.NivelTecn
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Entity.Enum.Role;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -46,12 +47,12 @@ public class Tecnico implements UserDetails{
     private String telefone;
     @NotBlank
     private String senha;
+    @Enumerated(EnumType.STRING)
     private Role role;
-    @NotNull
+    @NotNull @Enumerated(EnumType.STRING)
     private NivelTecnico nivelTecnico;
     private boolean ativo;
-    @OneToMany(mappedBy = "tecnico")
-    private List<Chamado> chamados;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("ROLE_" + this.role.name().toUpperCase()));
