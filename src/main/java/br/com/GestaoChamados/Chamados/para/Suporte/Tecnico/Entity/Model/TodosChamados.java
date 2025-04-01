@@ -25,8 +25,8 @@ import lombok.ToString;
 @EqualsAndHashCode(of = "id")
 @ToString
 @Entity
-@Table(name = "tb_chamado_aberto")
-public class ChamadoAberto {
+@Table(name = "tb_todos_chamados")
+public class TodosChamados {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,5 +41,5 @@ public class ChamadoAberto {
     private Prioridade prioridade;
     @NotNull 
     private Long usuario;
-
+    private Long tecnico;
 }

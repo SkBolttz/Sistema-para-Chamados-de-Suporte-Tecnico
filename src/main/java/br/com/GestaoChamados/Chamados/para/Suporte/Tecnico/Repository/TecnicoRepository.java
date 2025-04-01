@@ -7,5 +7,7 @@ import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Entity.Model.Tecnico;
 
 @Repository
 public interface TecnicoRepository extends JpaRepository<Tecnico, Long> {
+
+    Tecnico findByNome(String nomeTecnico);
     
 }
