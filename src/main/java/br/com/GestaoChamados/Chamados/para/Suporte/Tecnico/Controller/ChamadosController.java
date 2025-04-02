@@ -34,7 +34,7 @@ public class ChamadosController {
         }
     }
 
-    @PutMapping("/atender")
+    @PutMapping("/atender") 
     public ResponseEntity<String> atenderChamado(@RequestBody @Valid AtenderChamado chamado, Tecnico tecnico)  {
 
         return chamadoService.atenderChamado(chamado);
@@ -42,7 +42,6 @@ public class ChamadosController {
 
     @GetMapping("/listar/chamados/abertos")
     public List<String> lisarChamadosAbertos(){
-
         return chamadoService.listarChamadosAbertos();
     }
 }

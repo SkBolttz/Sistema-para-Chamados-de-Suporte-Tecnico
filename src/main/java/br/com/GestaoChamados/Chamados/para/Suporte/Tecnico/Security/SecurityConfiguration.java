@@ -27,6 +27,8 @@ public class SecurityConfiguration {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/registrar/**", "/api/auth/login/usuario").permitAll()
+                        .requestMatchers("/chamados/atender").hasRole("TECNICO")
+                        .requestMatchers("/usuario/deletar").hasRole("ADMINISTRADOR")
                         .anyRequest().authenticated())
                         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);

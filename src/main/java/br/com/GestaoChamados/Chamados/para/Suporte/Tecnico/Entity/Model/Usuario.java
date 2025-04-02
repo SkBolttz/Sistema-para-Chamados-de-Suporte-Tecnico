@@ -59,4 +59,13 @@ public class Usuario implements UserDetails{
     public String getUsername() {
         return this.getEmail();
     }
+    public Usuario(TodosUsuarios user) {
+        this.id = user.getId();
+        this.nome = user.getNome();
+        this.email = user.getEmail();
+        this.telefone = user.getTelefone();
+        this.senha = user.getSenha();
+        this.role = user.getRole();
+        this.ativo = user.isAtivo();
+    }
 }

@@ -60,13 +60,7 @@ public class ChamadoService {
         if(chamadoEntity.isPresent() && chamadoEntity.get().getStatus() == StatusChamado.ABERTO){
             
             Tecnico tecnicoEntity = tecnicoRepository.findByNome(chamado.nomeTecnico());
-
-            var role = tecnicoEntity.getAuthorities().stream().findFirst().get().getAuthority();
-
-            if(!role.equalsIgnoreCase("ROLE_TECNICO")){
-                return ResponseEntity.badRequest().body("Apenas tecnicos podem atender chamados!");
-            }
-
+            
             if(tecnicoEntity != null){
 
                 chamadoEntity.get().setStatus(StatusChamado.ANDAMENTO);
