@@ -1,7 +1,10 @@
 package br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -67,4 +70,26 @@ public class UsuarioController {
             return ResponseEntity.badRequest().body("Usuário nao encontrado! Favor verifique os dados.");
         }
     }
+
+    @GetMapping("/listar/todos/usuarios")
+    @Operation(summary = "Listagem de todos os Usuários", description = "Responsável pela listagem de todos os usuários.")
+    public List<String> listarTodosUsuarios() {
+
+        return todosUsuariosService.listarTodosUsuarios();
+    }
+
+    @GetMapping("/listar/todos/tecnicos")
+    @Operation(summary = "Listagem de todos os Técnicos", description = "Responsável pela listagem de todos os técnicos.")
+    public List<String> listarTodosTecnicos(){
+
+        return todosUsuariosService.listarTodosTecnicos();
+    }
+
+    @GetMapping("/listar/todos/administradores")
+    @Operation(summary = "Listagem de todos os Administradores", description = "Responsável pela listagem de todos os Administradores.")
+    public List<String> listarTodosAdministradores(){
+        
+        return todosUsuariosService.listarTodosAdministradores();
+    }
+
 }

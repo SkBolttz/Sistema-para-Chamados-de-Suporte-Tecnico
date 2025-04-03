@@ -1,5 +1,7 @@
 package br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -122,5 +124,35 @@ public class TodosUsuariosService {
             Usuario usuario2 = new Usuario(user);
             usuarioRepository.save(usuario2);
         }
+    }
+
+    public List<String> listarTodosUsuarios() {
+        
+         return todosUsuariosRepository.findAll()
+         .stream()
+         .filter(e -> e.getRole() == Role.USUARIO)
+         .map(e -> e.toString())
+         .toList();
+
+    }
+
+    public List<String> listarTodosTecnicos() {
+        
+        return todosUsuariosRepository.findAll()
+        .stream()
+        .filter(e -> e.getRole() == Role.TECNICO)
+        .map(e -> e.toString())
+        .toList();
+
+    }
+
+    public List<String> listarTodosAdministradores() {
+        
+        return todosUsuariosRepository.findAll()
+        .stream()
+        .filter(e -> e.getRole() == Role.ADMINISTRADOR)
+        .map(e -> e.toString())
+        .toList();
+
     }
 }
