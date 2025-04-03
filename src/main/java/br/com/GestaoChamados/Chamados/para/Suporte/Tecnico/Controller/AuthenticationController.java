@@ -24,7 +24,8 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/api/auth")
 public class AuthenticationController {
-    
+
+    @Autowired
     private LoginService loginService;
 
     @Autowired
@@ -33,39 +34,37 @@ public class AuthenticationController {
     @Autowired
     private AuthenticationManager manager;
 
-    public AuthenticationController(LoginService loginService) {
-        this.loginService = loginService;
-    }
-
     @PostMapping("/login/usuario")
     public String logar(@RequestBody @Valid LoginDTO usuario) throws UsuarioException {
 
-    try {
-        var tokenAuthentication = new UsernamePasswordAuthenticationToken(usuario.nome(), usuario.senha());
-        var authentication = manager.authenticate(tokenAuthentication);
+        try {
+            var tokenAuthentication = new UsernamePasswordAuthenticationToken(usuario.nome(), usuario.senha());
+            var authentication = manager.authenticate(tokenAuthentication);
 
-        var user = (TodosUsuarios) authentication.getPrincipal();
-        return tokenService.gerarToken(user, user.getRole().toString());
-    } catch (BadCredentialsException e) {
-        throw new UsuarioException("Usuário ou senha inválidos.");
-    }
+            var user = (TodosUsuarios) authentication.getPrincipal();
+            return tokenService.gerarToken(user, user.getRole().toString());
+        } catch (BadCredentialsException e) {
+            throw new UsuarioException("Usuário ou senha inválidos.");
+        }
     }
 
     @PostMapping("/registrar/usuario")
-    public String registrarUsuario(@RequestBody @Valid Usuario usuario) throws UsuarioException{
+    public String registrarUsuario(@RequestBody @Valid Usuario usuario) throws UsuarioException {
 
         return loginService.registrarUsuario(usuario);
     }
-    
+
     @PostMapping("/registrar/tecnico")
-    public ResponseEntity<String> registrarTecnico(@RequestBody @Valid Tecnico tecnico) throws UsuarioException, TecnicoException{
-        
+    public ResponseEntity<String> registrarTecnico(@RequestBody @Valid Tecnico tecnico)
+            throws UsuarioException, TecnicoException {
+
         return loginService.registrarTecnico(tecnico);
     }
 
     @PostMapping("/registrar/admin")
-    public ResponseEntity<String> registrarAdmin(@RequestBody @Valid Administrador admin) throws UsuarioException, TecnicoException, AdministradorException{
-        
+    public ResponseEntity<String> registrarAdmin(@RequestBody @Valid Administrador admin)
+            throws UsuarioException, TecnicoException, AdministradorException {
+
         return loginService.registrarAdmin(admin);
     }
 }

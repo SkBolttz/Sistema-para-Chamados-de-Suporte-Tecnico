@@ -4,22 +4,26 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
+
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.DTO.AberturaChamadoDTO;
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.DTO.AtenderChamado;
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.DTO.FinalizarChamado;
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Entity.Enum.Prioridade;
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Entity.Enum.StatusChamado;
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Entity.Model.TodosChamados;
+import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Entity.Model.LogChamado;
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Entity.Model.Tecnico;
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Entity.Model.Usuario;
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Exception.UsuarioException;
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Repository.ChamadoRepository;
+import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Repository.LogChamadoRepository;
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Repository.TecnicoRepository;
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Repository.UsuarioRepository;
-import jakarta.validation.Valid;
 
 @Service
 public class ChamadoService {
@@ -30,6 +34,8 @@ public class ChamadoService {
     private UsuarioRepository usuarioRepository;
     @Autowired
     private TecnicoRepository tecnicoRepository;
+    @Autowired
+    private LogChamadoRepository logChamadoRepository;
 
     @Transactional
     public ResponseEntity<String> abrirChamado(AberturaChamadoDTO chamado, Tecnico tecnico) throws UsuarioException {
@@ -82,8 +88,26 @@ public class ChamadoService {
         .toList();
     }
 
-    public ResponseEntity<String> finalizarChamado(FinalizarChamado chamado) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'finalizarChamado'");
+@Transactional
+public ResponseEntity<String> finalizarChamado(FinalizarChamado chamado) {
+    
+    TodosChamados chamadoEntity = chamadoRepository.findById(chamado.id())
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Chamado não encontrado!"));
+
+    if (chamadoEntity.getStatus() != StatusChamado.ANDAMENTO) {
+        return ResponseEntity.badRequest().body("Chamado não pode ser finalizado, pois não está em andamento.");
     }
+
+    chamadoEntity.setStatus(StatusChamado.ENCERRADO);
+    chamadoEntity.setDataFechamento(LocalDateTime.now());
+    chamadoRepository.save(chamadoEntity);
+
+    LogChamado logChamado = new LogChamado();
+    logChamado.setDataLog(LocalDateTime.now());
+    logChamado.setFinalizacao(chamado.finalizacao());
+    logChamado.setChamado(chamadoEntity);
+    logChamadoRepository.save(logChamado);
+
+    return ResponseEntity.ok("Chamado '" + chamadoEntity.getTitulo() + "' finalizado com sucesso!");
+}
 }
