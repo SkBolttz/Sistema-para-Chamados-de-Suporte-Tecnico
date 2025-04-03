@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.DTO.AberturaChamadoDTO;
-import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.DTO.AtenderChamado;
-import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.DTO.FinalizarChamado;
+import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.DTO.AtenderChamadoDTO;
+import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.DTO.FinalizarChamadoDTO;
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Exception.ChamadoException;
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Exception.TecnicoException;
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Exception.UsuarioException;
@@ -50,7 +50,7 @@ public class ChamadosController {
     @Operation(summary = "Atendimento de chamados", description = "Responsável pelo atendimento de chamados.")
     @Parameter(name = "Id", description = "Id do chamado.")
     @Parameter(name = "Nome Técnico", description = "Nome do Técnico responsável pelo atendimento do chamado.")
-    public ResponseEntity<String> atenderChamado(@RequestBody @Valid AtenderChamado chamado) {
+    public ResponseEntity<String> atenderChamado(@RequestBody @Valid AtenderChamadoDTO chamado) {
 
         try {
             chamadoService.atenderChamado(chamado);
@@ -75,7 +75,7 @@ public class ChamadosController {
     @Operation(summary = "Finalização de chamados", description = "Responsável pela finalização de chamados.")
     @Parameter(name = "Id", description = "Id do chamado.")
     @Parameter(name = "Finalização", description = "Descrição da finalização.")
-    public ResponseEntity<String> finalizarChamado(@RequestBody @Valid FinalizarChamado chamado) {
+    public ResponseEntity<String> finalizarChamado(@RequestBody @Valid FinalizarChamadoDTO chamado) {
 
         try {
             chamadoService.finalizarChamado(chamado);

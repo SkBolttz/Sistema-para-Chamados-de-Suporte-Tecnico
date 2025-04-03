@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.DTO.AtualizarDados;
-import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.DTO.DeletarUsuario;
-import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.DTO.ReativarUsuario;
+import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.DTO.AtualizarDadosDTO;
+import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.DTO.DeletarUsuarioDTO;
+import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.DTO.ReativarUsuarioDTO;
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Exception.UsuarioException;
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Service.TodosUsuariosService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -21,10 +21,9 @@ import jakarta.validation.Valid;
 @RequestMapping("/usuario")
 @Tag(name = "Controle de Usuário", description = "Responsável pelo controle de usuário.")
 public class UsuarioController {
-    
+
     @Autowired
     private TodosUsuariosService todosUsuariosService;
-
 
     @PutMapping("/atualizar")
     @Operation(summary = "Atualizar dados do Usuário", description = "Responsável pela atualização dos dados do usuário.")
@@ -32,13 +31,13 @@ public class UsuarioController {
     @Parameter(name = "Nome", description = "Nome do usuário.")
     @Parameter(name = "Email", description = "Email do usuário.")
     @Parameter(name = "Telefone", description = "Telefone do usuário.")
-    @Parameter(name = "Senha", description = "Senha do usuário.")   
-    public ResponseEntity<String> atualizar(@RequestBody @Valid AtualizarDados dados) {
-        
-        try{
+    @Parameter(name = "Senha", description = "Senha do usuário.")
+    public ResponseEntity<String> atualizar(@RequestBody @Valid AtualizarDadosDTO dados) {
+
+        try {
             todosUsuariosService.atualizarDados(dados);
             return ResponseEntity.status(200).body("Dados atualizados com sucesso!");
-        }catch(UsuarioException e){
+        } catch (UsuarioException e) {
             return ResponseEntity.badRequest().body("Usuário não encontrado! Favor verifique os dados.");
         }
     }
@@ -46,12 +45,12 @@ public class UsuarioController {
     @PutMapping("/deletar")
     @Operation(summary = "Deletar Usuário", description = "Responsável pela exclusão do usuário.")
     @Parameter(name = "Nome", description = "Nome do usuário.")
-    public ResponseEntity<String> deletar(@RequestBody @Valid DeletarUsuario usuario)  {
-        
-        try{
+    public ResponseEntity<String> deletar(@RequestBody @Valid DeletarUsuarioDTO usuario) {
+
+        try {
             todosUsuariosService.deletarUsuario(usuario);
             return ResponseEntity.status(200).body("Usuário deletado com sucesso!");
-        }catch(UsuarioException e){
+        } catch (UsuarioException e) {
             return ResponseEntity.badRequest().body("Usuário nao encontrado! Favor verifique os dados.");
         }
     }
@@ -59,12 +58,12 @@ public class UsuarioController {
     @PutMapping("/reativar")
     @Operation(summary = "Reativar Usuário", description = "Responsável pela reativação do usuário.")
     @Parameter(name = "Nome", description = "Nome do usuário.")
-    public ResponseEntity<String> reativarUsuario(@RequestBody @Valid ReativarUsuario usuario) {
-        
-        try{
+    public ResponseEntity<String> reativarUsuario(@RequestBody @Valid ReativarUsuarioDTO usuario) {
+
+        try {
             todosUsuariosService.reativarUsuario(usuario);
             return ResponseEntity.status(200).body("Usuário reativado com sucesso!");
-        }catch(UsuarioException e){
+        } catch (UsuarioException e) {
             return ResponseEntity.badRequest().body("Usuário nao encontrado! Favor verifique os dados.");
         }
     }

@@ -4,9 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.DTO.AtualizarDados;
-import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.DTO.DeletarUsuario;
-import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.DTO.ReativarUsuario;
+import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.DTO.AtualizarDadosDTO;
+import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.DTO.DeletarUsuarioDTO;
+import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.DTO.ReativarUsuarioDTO;
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Entity.Enum.Role;
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Entity.Model.Administrador;
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Entity.Model.Tecnico;
@@ -33,7 +33,7 @@ public class TodosUsuariosService {
     @Autowired
     private PasswordEncoder PasswordEncoder;
 
-    public void atualizarDados(@Valid AtualizarDados dados) throws UsuarioException {
+    public void atualizarDados(@Valid AtualizarDadosDTO dados) throws UsuarioException {
         TodosUsuarios user = todosUsuariosRepository.findById(dados.id())
                 .orElseThrow(() -> new UsuarioException("Usuário não encontrado."));
 
@@ -69,7 +69,7 @@ public class TodosUsuariosService {
     }
 
     @Transactional
-    public void deletarUsuario(DeletarUsuario usuario) throws UsuarioException {
+    public void deletarUsuario(DeletarUsuarioDTO usuario) throws UsuarioException {
 
         TodosUsuarios user = todosUsuariosRepository.findByNome(usuario.nome());
 
@@ -97,7 +97,7 @@ public class TodosUsuariosService {
     }
     
     @Transactional
-    public void reativarUsuario(ReativarUsuario usuario) throws UsuarioException {
+    public void reativarUsuario(ReativarUsuarioDTO usuario) throws UsuarioException {
     
         TodosUsuarios user = todosUsuariosRepository.findByNome(usuario.nome());
 

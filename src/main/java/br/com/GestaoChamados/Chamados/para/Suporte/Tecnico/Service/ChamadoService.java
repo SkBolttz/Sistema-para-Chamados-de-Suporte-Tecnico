@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.DTO.AberturaChamadoDTO;
-import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.DTO.AtenderChamado;
-import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.DTO.FinalizarChamado;
+import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.DTO.AtenderChamadoDTO;
+import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.DTO.FinalizarChamadoDTO;
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Entity.Enum.Prioridade;
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Entity.Enum.StatusChamado;
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Entity.Model.TodosChamados;
@@ -58,7 +58,7 @@ public class ChamadoService {
     }
 
     @Transactional
-    public void atenderChamado(AtenderChamado chamado) throws ChamadoException, TecnicoException {
+    public void atenderChamado(AtenderChamadoDTO chamado) throws ChamadoException, TecnicoException {
 
         Optional<TodosChamados> chamadoEntity = chamadoRepository.findById(chamado.id())
         .stream()
@@ -92,7 +92,7 @@ public class ChamadoService {
     }
 
 @Transactional
-public void finalizarChamado(FinalizarChamado chamado) throws ChamadoException {
+public void finalizarChamado(FinalizarChamadoDTO chamado) throws ChamadoException {
     
     TodosChamados chamadoEntity = chamadoRepository.findById(chamado.id())
         .orElseThrow(() -> new ChamadoException("Chamado nao encontrado!"));
