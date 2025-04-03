@@ -26,12 +26,14 @@ public class SecurityConfiguration {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/registrar/**", "/api/auth/login/usuario").permitAll()
+                        .requestMatchers("/api/auth/registrar/**", "/api/auth/login/usuario","/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers("/chamados/atender").hasRole("TECNICO")
                         .requestMatchers("/listar/chamados/abertos").hasRole("TECNICO")
                         .requestMatchers("/usuario/deletar").hasRole("ADMINISTRADOR")
                         .requestMatchers("/usuario/reativar").hasRole("ADMINISTRADOR")
                         .requestMatchers("/chamado/finalizar").hasRole("TECNICO")
+                        
+
                         .anyRequest().authenticated())
                         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);

@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Entity.Enum.Role;
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Entity.Model.Administrador;
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Entity.Model.Tecnico;
@@ -36,7 +35,7 @@ public class LoginService {
     @Autowired
     private AdministradorRepository administradorRepository;
 
-    public String registrarUsuario(Usuario usuario) throws UsuarioException {
+    public void registrarUsuario(Usuario usuario) throws UsuarioException {
         
         var nomeExiste = todosUsuariosRepository.findByNome(usuario.getNome());
 
@@ -67,10 +66,9 @@ public class LoginService {
         usuarioRepository.save(usuario);
         todosUsuariosRepository.save(todosUsuarios);
         
-        return "Usuário cadastrado com sucesso!";
     }
 
-    public ResponseEntity<String> registrarTecnico(Tecnico tecnico) throws TecnicoException {
+    public void registrarTecnico(Tecnico tecnico) throws TecnicoException {
         
         var nomeExiste = todosUsuariosRepository.findByNome(tecnico.getNome());
 
@@ -107,10 +105,9 @@ public class LoginService {
         todosUsuariosRepository.save(todosUsuarios);
         tecnicoRepository.save(tecnico);
 
-        return ResponseEntity.ok("Tecnico cadastrado com sucesso!");
     }
 
-    public ResponseEntity<String> registrarAdmin(Administrador admin) throws AdministradorException {
+    public void registrarAdmin(Administrador admin) throws AdministradorException {
         
         var nomeExiste = todosUsuariosRepository.findByNome(admin.getNome());
 
@@ -146,6 +143,5 @@ public class LoginService {
         todosUsuariosRepository.save(todosUsuarios);
         administradorRepository.save(admin);
 
-        return ResponseEntity.ok("Administrador cadastrado com sucesso!");
     }
 }
