@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.DTO.AberturaChamadoDTO;
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.DTO.AtenderChamado;
+import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.DTO.FinalizarChamado;
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Entity.Model.Tecnico;
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Exception.UsuarioException;
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Service.ChamadoService;
@@ -43,5 +44,12 @@ public class ChamadosController {
     @GetMapping("/listar/chamados/abertos")
     public List<String> lisarChamadosAbertos(){
         return chamadoService.listarChamadosAbertos();
+    }
+
+    @PutMapping("/finalizar")
+    public ResponseEntity<String> finalizarChamado(@RequestBody @Valid FinalizarChamado chamado, Tecnico tecnico)  {
+
+        return chamadoService.finalizarChamado(chamado);
+        
     }
 }

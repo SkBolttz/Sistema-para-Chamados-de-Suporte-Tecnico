@@ -1,5 +1,7 @@
 package br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Entity.Model;
 
+import java.time.LocalDateTime;
+
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Entity.Enum.Prioridade;
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Entity.Enum.StatusChamado;
 import jakarta.persistence.Entity;
@@ -42,4 +44,6 @@ public class TodosChamados {
     @NotNull 
     private Long usuario;
     private Long tecnico;
+    private LocalDateTime dataAbertura;
+    private LocalDateTime dataFechamento;
 }

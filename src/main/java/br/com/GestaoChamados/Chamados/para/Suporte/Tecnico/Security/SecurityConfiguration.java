@@ -28,6 +28,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/registrar/**", "/api/auth/login/usuario").permitAll()
                         .requestMatchers("/chamados/atender").hasRole("TECNICO")
+                        .requestMatchers("/listar/chamados/abertos").hasRole("TECNICO")
                         .requestMatchers("/usuario/deletar").hasRole("ADMINISTRADOR")
                         .requestMatchers("/usuario/reativar").hasRole("ADMINISTRADOR")
                         .anyRequest().authenticated())

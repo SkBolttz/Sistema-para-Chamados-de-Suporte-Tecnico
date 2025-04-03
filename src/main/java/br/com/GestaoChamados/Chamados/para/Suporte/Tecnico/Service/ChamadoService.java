@@ -1,15 +1,15 @@
 package br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.DTO.AberturaChamadoDTO;
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.DTO.AtenderChamado;
+import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.DTO.FinalizarChamado;
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Entity.Enum.Prioridade;
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Entity.Enum.StatusChamado;
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Entity.Model.TodosChamados;
@@ -19,6 +19,7 @@ import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Exception.UsuarioExce
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Repository.ChamadoRepository;
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Repository.TecnicoRepository;
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Repository.UsuarioRepository;
+import jakarta.validation.Valid;
 
 @Service
 public class ChamadoService {
@@ -46,7 +47,7 @@ public class ChamadoService {
         chamadoEntity.setPrioridade(Prioridade.BAIXA);
         chamadoEntity.setTitulo(chamado.titulo());
         chamadoEntity.setDescricao(chamado.descricao());
-
+        chamadoEntity.setDataAbertura(LocalDateTime.now());
 
         chamadoRepository.save(chamadoEntity);
 
@@ -79,5 +80,10 @@ public class ChamadoService {
         .filter(e -> e.getStatus() == StatusChamado.ABERTO)
         .map(e -> e.toString())
         .toList();
+    }
+
+    public ResponseEntity<String> finalizarChamado(FinalizarChamado chamado) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'finalizarChamado'");
     }
 }
