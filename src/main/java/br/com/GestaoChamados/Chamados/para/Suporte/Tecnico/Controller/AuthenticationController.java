@@ -1,6 +1,5 @@
 package br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Controller;
 
-import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -9,15 +8,15 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.DTO.LoginDTO;
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Entity.Model.Administrador;
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Entity.Model.Tecnico;
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Entity.Model.TodosUsuarios;
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Entity.Model.Usuario;
-import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Exception.AdministradorException;
-import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Exception.TecnicoException;
+import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Exception.EmailException;
+import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Exception.NomeException;
+import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Exception.TelefoneException;
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Exception.UsuarioException;
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Security.TokenService;
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Service.LoginService;
@@ -53,7 +52,7 @@ public class AuthenticationController {
             var user = (TodosUsuarios) authentication.getPrincipal();
             return tokenService.gerarToken(user, user.getRole().toString());
         } catch (BadCredentialsException e) {
-            throw new UsuarioException("Usuário ou senha inválidos.");
+            return "Usuário ou senha incorretos.";
         }
     }
 
@@ -63,11 +62,17 @@ public class AuthenticationController {
     @Parameter(name = "E-mail", description = "Email")
     @Parameter(name = "Telefone", description = "Telefone")
     @Parameter(name = "Senha", description = "Senha")
-    public ResponseEntity<String> registrarUsuario(@RequestBody @Valid Usuario usuario) throws UsuarioException {
+    public ResponseEntity<String> registrarUsuario(@RequestBody @Valid Usuario usuario) {
 
-        loginService.registrarUsuario(usuario);
-
-        return ResponseEntity.status(201).body("Seja bem-vindo(a) " + usuario.getNome() + ", sua conta foi criada com sucesso.");
+        try {
+            loginService.registrarUsuario(usuario);
+            return ResponseEntity.status(201)
+                    .body("Seja bem-vindo(a) " + usuario.getNome() + ", sua conta foi criada com sucesso.");
+        } catch (NomeException e) {
+            return ResponseEntity.badRequest().body("Nome de usário já cadastrado!");
+        } catch (EmailException e) {
+            return ResponseEntity.badRequest().body("E-mail ja cadastrado!");
+        }
     }
 
     @Operation(summary = "Realiza autenticação para o Cadastro de Técnico(a)", description = "Realiza autenticação para o Cadastro de Técnico(a).")
@@ -77,12 +82,19 @@ public class AuthenticationController {
     @Parameter(name = "Senha", description = "Senha")
     @Parameter(name = "Nível Técnico", description = "Nível Técnico")
     @PostMapping("/registrar/tecnico")
-    public ResponseEntity<String> registrarTecnico(@RequestBody @Valid Tecnico tecnico)
-            throws UsuarioException, TecnicoException {
+    public ResponseEntity<String> registrarTecnico(@RequestBody @Valid Tecnico tecnico) {
 
-        loginService.registrarTecnico(tecnico);
-
-        return ResponseEntity.status(201).body("Seja bem-vindo(a) " + tecnico.getNome() + ", sua conta foi criada com sucesso.");
+        try {
+            loginService.registrarTecnico(tecnico);
+            return ResponseEntity.status(201)
+                    .body("Seja bem-vindo(a) " + tecnico.getNome() + ", sua conta foi criada com sucesso.");
+        } catch (NomeException e) {
+            return ResponseEntity.badRequest().body("Nome de usário ja cadastrados!");
+        } catch (EmailException e) {
+            return ResponseEntity.badRequest().body("E-mail ja cadastrado!");
+        } catch (TelefoneException e) {
+            return ResponseEntity.badRequest().body("Telefone ja cadastrado!");
+        }
     }
 
     @Operation(summary = "Realiza autenticação para o Cadastro de Administrador(a)", description = "Realiza autenticação para o Cadastro de Administrador(a).")
@@ -91,11 +103,18 @@ public class AuthenticationController {
     @Parameter(name = "Telefone", description = "Telefone")
     @Parameter(name = "Senha", description = "Senha")
     @PostMapping("/registrar/admin")
-    public ResponseEntity<String> registrarAdmin(@RequestBody @Valid Administrador admin)
-            throws UsuarioException, TecnicoException, AdministradorException {
+    public ResponseEntity<String> registrarAdmin(@RequestBody @Valid Administrador admin) {
 
-        loginService.registrarAdmin(admin);
-
-        return ResponseEntity.status(201).body("Seja bem-vindo(a) " + admin.getNome() + ", sua conta foi criada com sucesso.");
+        try {
+            loginService.registrarAdmin(admin);
+            return ResponseEntity.status(201)
+                    .body("Seja bem-vindo(a) " + admin.getNome() + ", sua conta foi criada com sucesso.");
+        } catch (NomeException e) {
+            return ResponseEntity.badRequest().body("Nome de usário ja cadastrados!");
+        } catch (EmailException e) {
+            return ResponseEntity.badRequest().body("E-mail ja cadastrado!");
+        } catch (TelefoneException e) {
+            return ResponseEntity.badRequest().body("Telefone ja cadastrado!");
+        }
     }
 }

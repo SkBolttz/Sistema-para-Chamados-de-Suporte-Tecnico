@@ -1,7 +1,6 @@
 package br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Entity.Enum.Role;
@@ -9,9 +8,9 @@ import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Entity.Model.Administ
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Entity.Model.Tecnico;
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Entity.Model.TodosUsuarios;
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Entity.Model.Usuario;
-import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Exception.AdministradorException;
-import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Exception.TecnicoException;
-import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Exception.UsuarioException;
+import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Exception.EmailException;
+import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Exception.NomeException;
+import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Exception.TelefoneException;
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Repository.AdministradorRepository;
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Repository.TecnicoRepository;
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Repository.TodosUsuariosRepository;
@@ -35,18 +34,18 @@ public class LoginService {
     @Autowired
     private AdministradorRepository administradorRepository;
 
-    public void registrarUsuario(Usuario usuario) throws UsuarioException {
+    public void registrarUsuario(Usuario usuario) throws NomeException, EmailException {
         
         var nomeExiste = todosUsuariosRepository.findByNome(usuario.getNome());
 
         if(nomeExiste != null) {
-            throw new UsuarioException("Nome de usuário já cadastrado.");
+            throw new NomeException("Nome de usuário já cadastrado.");
         }
 
         var emailExiste = todosUsuariosRepository.findByEmail(usuario.getEmail());
 
         if(emailExiste != null){
-            throw new UsuarioException("Email já cadastrado.");
+            throw new EmailException("Email já cadastrado.");
         }
 
         usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
@@ -68,24 +67,24 @@ public class LoginService {
         
     }
 
-    public void registrarTecnico(Tecnico tecnico) throws TecnicoException {
+    public void registrarTecnico(Tecnico tecnico) throws NomeException, EmailException, TelefoneException  {
         
         var nomeExiste = todosUsuariosRepository.findByNome(tecnico.getNome());
 
         if(nomeExiste != null) {
-            throw new TecnicoException("Nome de usuário já cadastrado.");
+            throw new NomeException("Nome de usuário já cadastrado.");
         }
 
         var emailExiste = todosUsuariosRepository.findByEmail(tecnico.getEmail());
 
         if(emailExiste != null){
-            throw new TecnicoException("Email já cadastrado.");
+            throw new EmailException("Email já cadastrado.");
         }
 
         var telefoneExiste = todosUsuariosRepository.findByTelefone(tecnico.getTelefone());
 
         if(telefoneExiste != null){
-            throw new TecnicoException("Telefone já cadastrado.");
+            throw new TelefoneException("Telefone já cadastrado.");
         }
 
         tecnico.setSenha(passwordEncoder.encode(tecnico.getSenha()));
@@ -107,24 +106,24 @@ public class LoginService {
 
     }
 
-    public void registrarAdmin(Administrador admin) throws AdministradorException {
+    public void registrarAdmin(Administrador admin) throws NomeException, EmailException, TelefoneException {
         
         var nomeExiste = todosUsuariosRepository.findByNome(admin.getNome());
 
         if(nomeExiste != null) {
-            throw new AdministradorException("Nome de usuário já cadastrado.");
+            throw new NomeException("Nome de usuário já cadastrado.");
         }
 
         var emailExiste = todosUsuariosRepository.findByEmail(admin.getEmail());
 
         if(emailExiste != null){
-            throw new AdministradorException("Email já cadastrado.");
+            throw new EmailException("Email já cadastrado.");
         }
 
         var telefoneExiste = todosUsuariosRepository.findByTelefone(admin.getTelefone());
 
         if(telefoneExiste != null){
-            throw new AdministradorException("Telefone já cadastrado.");
+            throw new TelefoneException("Telefone já cadastrado.");
         }
 
         admin.setSenha(passwordEncoder.encode(admin.getSenha()));

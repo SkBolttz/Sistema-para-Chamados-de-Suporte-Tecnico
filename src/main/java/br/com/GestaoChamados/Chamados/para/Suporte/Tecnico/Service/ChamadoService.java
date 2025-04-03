@@ -4,12 +4,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
-
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.DTO.AberturaChamadoDTO;
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.DTO.AtenderChamado;
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.DTO.FinalizarChamado;
@@ -19,6 +15,8 @@ import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Entity.Model.TodosCha
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Entity.Model.LogChamado;
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Entity.Model.Tecnico;
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Entity.Model.Usuario;
+import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Exception.ChamadoException;
+import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Exception.TecnicoException;
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Exception.UsuarioException;
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Repository.ChamadoRepository;
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Repository.LogChamadoRepository;
@@ -38,7 +36,7 @@ public class ChamadoService {
     private LogChamadoRepository logChamadoRepository;
 
     @Transactional
-    public ResponseEntity<String> abrirChamado(AberturaChamadoDTO chamado, Tecnico tecnico) throws UsuarioException {
+    public void abrirChamado(AberturaChamadoDTO chamado) throws UsuarioException {
         
         Usuario user = usuarioRepository.findByNome(chamado.nomeUsuario());
         
@@ -57,27 +55,32 @@ public class ChamadoService {
 
         chamadoRepository.save(chamadoEntity);
 
-        return ResponseEntity.ok("Chamado aberto com sucesso!");
     }
 
-    public ResponseEntity<String> atenderChamado(AtenderChamado chamado) {
+    @Transactional
+    public void atenderChamado(AtenderChamado chamado) throws ChamadoException, TecnicoException {
 
-        Optional<TodosChamados> chamadoEntity = chamadoRepository.findById(chamado.id());
+        Optional<TodosChamados> chamadoEntity = chamadoRepository.findById(chamado.id())
+        .stream()
+        .filter(e -> e.getStatus() == StatusChamado.ABERTO)
+        .findFirst();
+
+        if(!chamadoEntity.isPresent()){
+            throw new ChamadoException("Chamado nao encontrado!");
+        }
 
         if(chamadoEntity.isPresent() && chamadoEntity.get().getStatus() == StatusChamado.ABERTO){
             
             Tecnico tecnicoEntity = tecnicoRepository.findByNome(chamado.nomeTecnico());
             
-            if(tecnicoEntity != null){
+            if(tecnicoEntity == null){
+                throw new TecnicoException("Tecnico nao encontrado!");
+            }
 
                 chamadoEntity.get().setStatus(StatusChamado.ANDAMENTO);
                 chamadoEntity.get().setTecnico(tecnicoEntity.getId());
                 chamadoRepository.save(chamadoEntity.get());
-
-                return ResponseEntity.ok("Chamado " + chamado.titulo() + " atendido com sucesso!");
-            }
         }
-        return ResponseEntity.badRequest().body("Chamado " + chamado.titulo() + " nao encontrado!");
 }
 
     public List<String> listarChamadosAbertos(){
@@ -89,13 +92,13 @@ public class ChamadoService {
     }
 
 @Transactional
-public ResponseEntity<String> finalizarChamado(FinalizarChamado chamado) {
+public void finalizarChamado(FinalizarChamado chamado) throws ChamadoException {
     
     TodosChamados chamadoEntity = chamadoRepository.findById(chamado.id())
-        .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Chamado não encontrado!"));
+        .orElseThrow(() -> new ChamadoException("Chamado nao encontrado!"));
 
     if (chamadoEntity.getStatus() != StatusChamado.ANDAMENTO) {
-        return ResponseEntity.badRequest().body("Chamado não pode ser finalizado, pois não está em andamento.");
+        throw new ChamadoException("Chamado nao encontrado!");
     }
 
     chamadoEntity.setStatus(StatusChamado.ENCERRADO);
@@ -107,7 +110,5 @@ public ResponseEntity<String> finalizarChamado(FinalizarChamado chamado) {
     logChamado.setFinalizacao(chamado.finalizacao());
     logChamado.setChamado(chamadoEntity);
     logChamadoRepository.save(logChamado);
-
-    return ResponseEntity.ok("Chamado '" + chamadoEntity.getTitulo() + "' finalizado com sucesso!");
 }
 }
