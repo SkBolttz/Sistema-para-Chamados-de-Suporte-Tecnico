@@ -25,7 +25,7 @@ import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Repository.UsuarioRep
 
 @Service
 public class ChamadoService {
-    
+
     @Autowired
     private ChamadoRepository chamadoRepository;
     @Autowired
@@ -37,10 +37,10 @@ public class ChamadoService {
 
     @Transactional
     public void abrirChamado(AberturaChamadoDTO chamado) throws UsuarioException {
-        
+
         Usuario user = usuarioRepository.findByNome(chamado.nomeUsuario());
-        
-        if(user == null){
+
+        if (user == null) {
             throw new UsuarioException("Usuário incorreto!");
         }
 
@@ -61,54 +61,54 @@ public class ChamadoService {
     public void atenderChamado(AtenderChamadoDTO chamado) throws ChamadoException, TecnicoException {
 
         Optional<TodosChamados> chamadoEntity = chamadoRepository.findById(chamado.id())
-        .stream()
-        .filter(e -> e.getStatus() == StatusChamado.ABERTO)
-        .findFirst();
+                .stream()
+                .filter(e -> e.getStatus() == StatusChamado.ABERTO)
+                .findFirst();
 
-        if(!chamadoEntity.isPresent()){
+        if (!chamadoEntity.isPresent()) {
             throw new ChamadoException("Chamado nao encontrado!");
         }
 
-        if(chamadoEntity.isPresent() && chamadoEntity.get().getStatus() == StatusChamado.ABERTO){
-            
+        if (chamadoEntity.isPresent() && chamadoEntity.get().getStatus() == StatusChamado.ABERTO) {
+
             Tecnico tecnicoEntity = tecnicoRepository.findByNome(chamado.nomeTecnico());
-            
-            if(tecnicoEntity == null){
+
+            if (tecnicoEntity == null) {
                 throw new TecnicoException("Tecnico nao encontrado!");
             }
 
-                chamadoEntity.get().setStatus(StatusChamado.ANDAMENTO);
-                chamadoEntity.get().setTecnico(tecnicoEntity.getId());
-                chamadoRepository.save(chamadoEntity.get());
+            chamadoEntity.get().setStatus(StatusChamado.ANDAMENTO);
+            chamadoEntity.get().setTecnico(tecnicoEntity.getId());
+            chamadoRepository.save(chamadoEntity.get());
         }
-}
+    }
 
-    public List<String> listarChamadosAbertos(){
+    public List<String> listarChamadosAbertos() {
         return chamadoRepository.findAll()
-        .stream()
-        .filter(e -> e.getStatus() == StatusChamado.ABERTO)
-        .map(e -> e.toString())
-        .toList();
+                .stream()
+                .filter(e -> e.getStatus() == StatusChamado.ABERTO)
+                .map(e -> e.toString())
+                .toList();
     }
 
-@Transactional
-public void finalizarChamado(FinalizarChamadoDTO chamado) throws ChamadoException {
-    
-    TodosChamados chamadoEntity = chamadoRepository.findById(chamado.id())
-        .orElseThrow(() -> new ChamadoException("Chamado nao encontrado!"));
+    @Transactional
+    public void finalizarChamado(FinalizarChamadoDTO chamado) throws ChamadoException {
 
-    if (chamadoEntity.getStatus() != StatusChamado.ANDAMENTO) {
-        throw new ChamadoException("Chamado nao encontrado!");
+        TodosChamados chamadoEntity = chamadoRepository.findById(chamado.id())
+                .orElseThrow(() -> new ChamadoException("Chamado nao encontrado!"));
+
+        if (chamadoEntity.getStatus() != StatusChamado.ANDAMENTO) {
+            throw new ChamadoException("Chamado nao encontrado!");
+        }
+
+        chamadoEntity.setStatus(StatusChamado.ENCERRADO);
+        chamadoEntity.setDataFechamento(LocalDateTime.now());
+        chamadoRepository.save(chamadoEntity);
+
+        LogChamado logChamado = new LogChamado();
+        logChamado.setDataLog(LocalDateTime.now());
+        logChamado.setFinalizacao(chamado.finalizacao());
+        logChamado.setChamado(chamadoEntity);
+        logChamadoRepository.save(logChamado);
     }
-
-    chamadoEntity.setStatus(StatusChamado.ENCERRADO);
-    chamadoEntity.setDataFechamento(LocalDateTime.now());
-    chamadoRepository.save(chamadoEntity);
-
-    LogChamado logChamado = new LogChamado();
-    logChamado.setDataLog(LocalDateTime.now());
-    logChamado.setFinalizacao(chamado.finalizacao());
-    logChamado.setChamado(chamadoEntity);
-    logChamadoRepository.save(logChamado);
-}
 }

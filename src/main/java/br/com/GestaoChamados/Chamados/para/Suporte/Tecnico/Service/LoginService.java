@@ -35,16 +35,16 @@ public class LoginService {
     private AdministradorRepository administradorRepository;
 
     public void registrarUsuario(Usuario usuario) throws NomeException, EmailException {
-        
+
         var nomeExiste = todosUsuariosRepository.findByNome(usuario.getNome());
 
-        if(nomeExiste != null) {
+        if (nomeExiste != null) {
             throw new NomeException("Nome de usuário já cadastrado.");
         }
 
         var emailExiste = todosUsuariosRepository.findByEmail(usuario.getEmail());
 
-        if(emailExiste != null){
+        if (emailExiste != null) {
             throw new EmailException("Email já cadastrado.");
         }
 
@@ -64,26 +64,26 @@ public class LoginService {
 
         usuarioRepository.save(usuario);
         todosUsuariosRepository.save(todosUsuarios);
-        
+
     }
 
-    public void registrarTecnico(Tecnico tecnico) throws NomeException, EmailException, TelefoneException  {
-        
+    public void registrarTecnico(Tecnico tecnico) throws NomeException, EmailException, TelefoneException {
+
         var nomeExiste = todosUsuariosRepository.findByNome(tecnico.getNome());
 
-        if(nomeExiste != null) {
+        if (nomeExiste != null) {
             throw new NomeException("Nome de usuário já cadastrado.");
         }
 
         var emailExiste = todosUsuariosRepository.findByEmail(tecnico.getEmail());
 
-        if(emailExiste != null){
+        if (emailExiste != null) {
             throw new EmailException("Email já cadastrado.");
         }
 
         var telefoneExiste = todosUsuariosRepository.findByTelefone(tecnico.getTelefone());
 
-        if(telefoneExiste != null){
+        if (telefoneExiste != null) {
             throw new TelefoneException("Telefone já cadastrado.");
         }
 
@@ -107,22 +107,22 @@ public class LoginService {
     }
 
     public void registrarAdmin(Administrador admin) throws NomeException, EmailException, TelefoneException {
-        
+
         var nomeExiste = todosUsuariosRepository.findByNome(admin.getNome());
 
-        if(nomeExiste != null) {
+        if (nomeExiste != null) {
             throw new NomeException("Nome de usuário já cadastrado.");
         }
 
         var emailExiste = todosUsuariosRepository.findByEmail(admin.getEmail());
 
-        if(emailExiste != null){
+        if (emailExiste != null) {
             throw new EmailException("Email já cadastrado.");
         }
 
         var telefoneExiste = todosUsuariosRepository.findByTelefone(admin.getTelefone());
 
-        if(telefoneExiste != null){
+        if (telefoneExiste != null) {
             throw new TelefoneException("Telefone já cadastrado.");
         }
 

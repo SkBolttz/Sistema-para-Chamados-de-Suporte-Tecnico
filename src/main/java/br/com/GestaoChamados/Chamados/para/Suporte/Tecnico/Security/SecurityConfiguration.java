@@ -13,7 +13,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 public class SecurityConfiguration {
-    
 
     private final FilterSecurity securityFilter;
 
@@ -26,16 +25,17 @@ public class SecurityConfiguration {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/registrar/**", "/api/auth/login/usuario","/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                        .requestMatchers("/chamados/atender").hasRole("TECNICO")
-                        .requestMatchers("/listar/chamados/abertos").hasRole("TECNICO")
+                        .requestMatchers("/api/auth/registrar/**", "/api/auth/login/usuario")
+                        .permitAll()
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        .requestMatchers("/chamados/atender").hasAnyRole("TECNICO", "ADMINISTRADOR")
+                        .requestMatchers("/listar/chamados/abertos").hasAnyRole("TECNICO", "ADMINISTRADOR")
                         .requestMatchers("/usuario/deletar").hasRole("ADMINISTRADOR")
                         .requestMatchers("/usuario/reativar").hasRole("ADMINISTRADOR")
-                        .requestMatchers("/chamado/finalizar").hasRole("TECNICO")
-                        
+                        .requestMatchers("/chamado/finalizar").hasAnyRole("TECNICO", "ADMINISTRADOR")
 
                         .anyRequest().authenticated())
-                        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }

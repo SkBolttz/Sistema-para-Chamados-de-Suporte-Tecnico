@@ -22,14 +22,14 @@ public class ChamadoScheduler {
     @Scheduled(fixedRate = 60000)
     public void alterarPrioridade() {
         List<TodosChamados> chamados = chamadoRepository.findAll()
-            .stream()
-            .filter(e -> e.getStatus() == StatusChamado.ABERTO)
-            .filter(e -> e.getDataAbertura().plusMinutes(1).isBefore(LocalDateTime.now()))
-            .toList(); 
+                .stream()
+                .filter(e -> e.getStatus() == StatusChamado.ABERTO)
+                .filter(e -> e.getDataAbertura().plusMinutes(20).isBefore(LocalDateTime.now()))
+                .toList();
 
         if (!chamados.isEmpty()) {
             chamados.forEach(this::aumentarPrioridade);
-            chamadoRepository.saveAll(chamados); 
+            chamadoRepository.saveAll(chamados);
         }
     }
 
@@ -38,7 +38,8 @@ public class ChamadoScheduler {
             case BAIXA -> chamado.setPrioridade(Prioridade.MEDIA);
             case MEDIA -> chamado.setPrioridade(Prioridade.ALTA);
             case ALTA -> chamado.setPrioridade(Prioridade.CRITICA);
-            default -> {}
+            default -> {
+            }
         }
     }
 }

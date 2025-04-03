@@ -95,19 +95,19 @@ public class TodosUsuariosService {
             usuarioRepository.save(usuario2);
         }
     }
-    
+
     @Transactional
     public void reativarUsuario(ReativarUsuarioDTO usuario) throws UsuarioException {
-    
+
         TodosUsuarios user = todosUsuariosRepository.findByNome(usuario.nome());
 
-        if(user == null){
+        if (user == null) {
             throw new UsuarioException("Usuário nao encontrado.");
         }
-        
+
         user.setAtivo(true);
         todosUsuariosRepository.save(user);
-    
+
         if (user.getRole() == Role.ADMINISTRADOR) {
             Administrador admin = new Administrador(user);
             administradorRepository.save(admin);

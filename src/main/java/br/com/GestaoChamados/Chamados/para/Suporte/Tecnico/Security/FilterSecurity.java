@@ -18,7 +18,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Component
-public class FilterSecurity extends OncePerRequestFilter{
+public class FilterSecurity extends OncePerRequestFilter {
 
     @Value("${jwt.secret}")
     private String secret;
@@ -45,15 +45,15 @@ public class FilterSecurity extends OncePerRequestFilter{
             String role = decodedJWT.getClaim("role").asString();
 
             UserDetails userDetails = User.builder()
-            .username(usuario)
-            .password("")
-            .roles(role) 
-            .build();
+                    .username(usuario)
+                    .password("")
+                    .roles(role)
+                    .build();
 
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails,
-                    null, userDetails.getAuthorities());            
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
-            
+                    null, userDetails.getAuthorities());
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
         } catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.getWriter().write("Erro ao validar token JWT: " + e.getMessage());
