@@ -1,11 +1,9 @@
 package br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.DTO.AtualizarDados;
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.DTO.DeletarUsuario;
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.DTO.ReativarUsuario;
@@ -35,7 +33,7 @@ public class TodosUsuariosService {
     @Autowired
     private PasswordEncoder PasswordEncoder;
 
-    public ResponseEntity<String> atualizarDados(@Valid AtualizarDados dados) throws UsuarioException {
+    public void atualizarDados(@Valid AtualizarDados dados) throws UsuarioException {
         TodosUsuarios user = todosUsuariosRepository.findById(dados.id())
                 .orElseThrow(() -> new UsuarioException("Usuário não encontrado."));
 
@@ -68,12 +66,10 @@ public class TodosUsuariosService {
         }
 
         todosUsuariosRepository.save(user);
-
-        return ResponseEntity.ok("Usuário atualizado com sucesso.");
     }
 
     @Transactional
-    public ResponseEntity<String> deletarUsuario(DeletarUsuario usuario) throws UsuarioException {
+    public void deletarUsuario(DeletarUsuario usuario) throws UsuarioException {
 
         TodosUsuarios user = todosUsuariosRepository.findByNome(usuario.nome());
 
@@ -98,14 +94,16 @@ public class TodosUsuariosService {
             Usuario usuario2 = new Usuario(user);
             usuarioRepository.save(usuario2);
         }
-
-        return ResponseEntity.ok("Usuário deletado com sucesso.");
     }
     
     @Transactional
-    public ResponseEntity<String> reativarUsuario(ReativarUsuario usuario) throws UsuarioException {
+    public void reativarUsuario(ReativarUsuario usuario) throws UsuarioException {
     
         TodosUsuarios user = todosUsuariosRepository.findByNome(usuario.nome());
+
+        if(user == null){
+            throw new UsuarioException("Usuário nao encontrado.");
+        }
         
         user.setAtivo(true);
         todosUsuariosRepository.save(user);
@@ -124,7 +122,5 @@ public class TodosUsuariosService {
             Usuario usuario2 = new Usuario(user);
             usuarioRepository.save(usuario2);
         }
-    
-        return ResponseEntity.ok("Usuário reativado com sucesso.");
     }
 }
