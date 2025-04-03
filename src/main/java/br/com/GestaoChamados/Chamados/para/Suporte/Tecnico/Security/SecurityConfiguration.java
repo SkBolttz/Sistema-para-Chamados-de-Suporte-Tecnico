@@ -29,6 +29,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/api/auth/registrar/**", "/api/auth/login/usuario").permitAll()
                         .requestMatchers("/chamados/atender").hasRole("TECNICO")
                         .requestMatchers("/usuario/deletar").hasRole("ADMINISTRADOR")
+                        .requestMatchers("/usuario/reativar").hasRole("ADMINISTRADOR")
                         .anyRequest().authenticated())
                         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);

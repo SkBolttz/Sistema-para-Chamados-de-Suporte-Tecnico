@@ -15,6 +15,6 @@ public interface TodosUsuariosRepository extends JpaRepository<TodosUsuarios, Lo
 
     TodosUsuarios findByEmailAndSenha(String email, String senha);
 
-    Object findByTelefone(String telefone);
+    TodosUsuarios findByTelefone(String telefone);
     
 }

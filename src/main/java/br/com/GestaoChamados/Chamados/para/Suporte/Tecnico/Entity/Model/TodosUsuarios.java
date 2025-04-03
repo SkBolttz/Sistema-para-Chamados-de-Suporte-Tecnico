@@ -66,5 +66,5 @@ public class TodosUsuarios implements UserDetails{
     }
     public TodosUsuarios(Tecnico tecnico) {}
     public TodosUsuarios(Usuario usuario) {}
-    public TodosUsuarios(Administrador admin) {} 
+    public TodosUsuarios(Administrador admin) {}
 }

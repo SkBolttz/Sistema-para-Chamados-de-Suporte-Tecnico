@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.DTO.AtualizarDados;
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.DTO.DeletarUsuario;
+import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.DTO.ReativarUsuario;
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Exception.UsuarioException;
 import br.com.GestaoChamados.Chamados.para.Suporte.Tecnico.Service.TodosUsuariosService;
 import jakarta.validation.Valid;
@@ -31,5 +32,11 @@ public class UsuarioController {
     public ResponseEntity<String> deletar(@RequestBody @Valid DeletarUsuario usuario) throws UsuarioException {
         
         return todosUsuariosService.deletarUsuario(usuario);
+    }
+
+    @PutMapping("/reativar")
+    public ResponseEntity<String> reativarUsuario(@RequestBody @Valid ReativarUsuario usuario) throws UsuarioException {
+        
+        return todosUsuariosService.reativarUsuario(usuario);
     }
 }
